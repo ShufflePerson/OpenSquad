@@ -1,0 +1,53 @@
+{
+  "name": "opensquad",
+  "version": "1.0.0",
+  "description": "Squad & Squad44 Scripting Framework",
+  "main": "dist/app.js",
+  "scripts": {
+    "dev": "tsx watch src/app.ts",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write .",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShufflePerson/OpenSquad.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ShufflePerson/OpenSquad/issues"
+  },
+  "homepage": "https://github.com/ShufflePerson/OpenSquad#readme",
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "commander": "^14.0.0",
+    "discord.js": "^14.21.0",
+    "inquirer": "^12.9.0",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "prom-client": "^15.1.3",
+    "reflect-metadata": "^0.2.2",
+    "sequelize": "^6.37.7",
+    "tsyringe": "^4.10.0",
+    "zod": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.8",
+    "@types/node": "^24.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.4",
+    "prettier": "^3.6.2",
+    "sequelize-cli": "^6.6.3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
