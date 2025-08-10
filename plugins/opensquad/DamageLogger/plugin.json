@@ -1,0 +1,7 @@
+{
+    "name": "DamageLogger",
+    "author": "OpenSquad",
+    "version": "1.0.0",
+    "description": "A simple plugin to log player damage events.",
+    "main": "index.js"
+}

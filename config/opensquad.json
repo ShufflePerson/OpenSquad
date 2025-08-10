@@ -8,9 +8,7 @@
             "host": "127.0.0.1",
             "port": 21114
         },
-        "plugins": {
-            "server-start-message": "both"
-        },
+        "plugins": [],
         "logs": {
             "path": "./temp_logs.txt"
         }
@@ -21,9 +19,9 @@
             "host": "127.0.0.1",
             "port": 21114
         },
-        "plugins": {
-            "server-start-message": "both"
-        },
+        "plugins": [
+            "DamageLogger"
+        ],
         "logs": {
             "path": "./PostScriptum.log"
         }
