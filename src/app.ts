@@ -1,4 +1,5 @@
 import "reflect-metadata"
+
 import { injectable } from 'tsyringe';
 import { ConfigService } from './services/Config.service';
 import { LoggerService } from './services/Logger.service';
@@ -21,7 +22,7 @@ class OpenSquad {
 }
 
 async function bootstrap() {
-    const container = configureContainer();
+    const container = await configureContainer();
 
     try {
         const logReader = container.resolve(LogReaderService);
