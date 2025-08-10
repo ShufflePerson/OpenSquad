@@ -1,19 +1,18 @@
 import { inject, injectable } from "tsyringe";
 import { LoggerService } from "services/Logger.service";
-import { LogReaderService } from "services/LogReader.service";
 import { EGameType, ENUM_GAME_TYPE } from "types/enums/EGameType";
 import { IParsedLog } from "types/services/LogParser/IParsedLog";
-import { TakeDamageParser } from "./parsers/TakeDamageParser";
 import { EVENT_PARSER, IEventParser } from "types/services/LogParser/IEventParser";
+import { EventManagerService } from "services/EventManager.service";
 
 @injectable()
 export class LogParserService {
 
     constructor(
         private readonly logger: LoggerService,
-        private readonly reader: LogReaderService,
         @inject(ENUM_GAME_TYPE) private readonly gameType: EGameType,
-        @inject(EVENT_PARSER) private readonly parsers: IEventParser[]
+        @inject(EVENT_PARSER) private readonly parsers: IEventParser[],
+        private readonly eventManager: EventManagerService
     ) {
         this.logger.info(`[LogParserService] Initialized with ${this.parsers.length} parsers.`);
     }
@@ -24,7 +23,11 @@ export class LogParserService {
 
         for (const line of newLines) {
             const parsedLog = this._parseLine(line);
-            console.log(parsedLog)
+
+            if (parsedLog) {
+                this.eventManager.emit(parsedLog.type, parsedLog);
+                this.eventManager.emit('log-parsed', parsedLog);
+            }
         }
     }
 
@@ -41,7 +44,7 @@ export class LogParserService {
                 return suitableParser.parse(line, timestamp, this.gameType);
             }
 
-            this.logger.debug(`[LogParserService] Unsupported log line: ${line}`);
+            this.eventManager.emit('log-unparsed', line);
             return null;
 
         } catch (err) {
@@ -49,7 +52,6 @@ export class LogParserService {
             return null;
         }
     }
-
 
     private _parseTimestamp(logLine: string): Date | null {
         const regex = /\[(\d{4})\.(\d{2})\.(\d{2})-(\d{2})\.(\d{2})\.(\d{2}):(\d{3})\]/;
