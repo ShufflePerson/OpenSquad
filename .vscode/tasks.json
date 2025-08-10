@@ -1,0 +1,64 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile",
+            "type": "npm",
+            "script": "compile",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "compileGroup",
+                "panel": "dedicated",
+                "reveal": "always",
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            }
+        },
+        {
+            "label": "Start",
+            "type": "npm",
+            "script": "start",
+            "problemMatcher": [],
+            "runOptions": {
+                "instanceLimit": 1,
+                "instancePolicy": "terminateOldest"
+            },
+            "presentation": {
+                "group": "startGroup",
+                "panel": "dedicated",
+                "reveal": "always",
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            }
+        },
+        {
+            "label": "Compile and Start",
+            "dependsOn": [
+                "Compile",
+                "Start"
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
