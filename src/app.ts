@@ -5,7 +5,6 @@ import { LoggerService } from './services/Logger.service';
 import { LogReaderService } from './services/LogReader.service';
 import { LogParserService } from './services/LogParser/LogParser.service';
 import { configureContainer } from './container';
-import { EVENT_PARSER } from "types/services/LogParser/IEventParser";
 
 @injectable()
 class OpenSquad {
