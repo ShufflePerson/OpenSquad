@@ -15,12 +15,7 @@ const gameConfigSchema = z.object({
         host: z.string(),
         port: z.number().positive(),
     }),
-    plugins: z.record(
-        z.string(),
-        z.enum(['squad', 'squad44', 'both'], {
-            error: 'Plugin target must be "squad", "squad44", or "both".',
-        })
-    ),
+    plugins: z.array(z.string()),
     logs: z.object({
         path: z.string()
     })
@@ -35,9 +30,9 @@ const coreConfigSchema = z.object({
 });
 
 
-
 type EnvConfig = z.infer<typeof envSchema>;
 type CoreConfig = z.infer<typeof coreConfigSchema>;
+
 
 @singleton()
 export class ConfigService {
@@ -48,9 +43,7 @@ export class ConfigService {
     constructor() {
         console.log('Initializing ConfigService...');
         this.envConfig = this._loadAndValidateEnv();
-
         this.coreConfig = this._loadAndValidateCoreConfig();
-
         this._loadAndValidatePluginConfigs();
 
         console.log('ConfigService initialized successfully.');
@@ -113,7 +106,7 @@ export class ConfigService {
     }
 
     private _loadAndValidatePluginConfigs(): void {
-        const enabledPlugins = [...Object.keys(this.coreConfig.squad.plugins), ...Object.keys(this.coreConfig.squad44.plugins)];
+        const enabledPlugins = [...this.coreConfig.squad.plugins, ...this.coreConfig.squad44.plugins];
         for (const pluginName of enabledPlugins) {
             const configPath = path.resolve(process.cwd(), 'config', 'plugins', `${pluginName}.json`);
             try {
