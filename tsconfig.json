@@ -3,9 +3,9 @@
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "baseUrl": "./src/",
+    "baseUrl": ".",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "sourceMap": true,
     "strict": true,
     "noImplicitAny": true,
@@ -19,9 +19,22 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
+      ],
+      "~/*": [
+        "./plugins/*"
+      ],
+      "scripts/*": [
+        "./scripts/*"
+      ],
+      "types/*": [
+        "./src/types/*"
+      ],
+      "services/*": [
+        "./src/services/*"
       ]
     }
   },
