@@ -2,7 +2,7 @@ const fs = require('fs/promises');
 const path = require('path');
 
 const logFileName = 'PostScriptum.log';
-const logFilePath = path.resolve(__dirname, logFileName);
+const logFilePath = path.resolve(process.cwd(), logFileName);
 const linesToCopy = 10;
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -27,7 +27,7 @@ async function performAppendAndReset() {
         await delay(1000);
         await fs.truncate(logFilePath, originalSize);
     } catch (error) {
-
+        console.log(error)
     }
 }
 
