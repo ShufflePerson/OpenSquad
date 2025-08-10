@@ -4,10 +4,13 @@
   "description": "Squad & Squad44 Scripting Framework",
   "main": "dist/app.js",
   "scripts": {
+    "compile": "tsc && tsc-alias",
+    "start": "node dist/src/app.js",
     "dev": "nodemon --watch src --ext ts --exec ts-node -r tsconfig-paths/register src/app.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start-log-simulation": "node scripts/simulateLogChanges.js"
   },
   "repository": {
     "type": "git",
@@ -51,6 +54,7 @@
     "prettier": "^3.6.2",
     "sequelize-cli": "^6.6.3",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2",
