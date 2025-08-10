@@ -18,6 +18,8 @@ Currently the `PostScriptum.log` file is being used as a test-log file. You can 
 3. Define the parsed event interface in `src\types\services\LogParser\IParsedLog.ts`
 4. Load the class into the container in `src\container\parsers.ts`
 
+Whenever possible, every parser should support both games ( Squad & Squad44 ), if different parsing is required, you can do that by checking the `game` argument.
+
 ## Todo
 
 - More parsers
