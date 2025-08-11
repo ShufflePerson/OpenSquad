@@ -1,6 +1,6 @@
 import "reflect-metadata"
 
-import { injectable } from 'tsyringe';
+import { container, injectable } from 'tsyringe';
 import { ConfigService } from './services/Config.service';
 import { LoggerService } from './services/Logger.service';
 import { LogReaderService } from './services/LogReader.service';
@@ -23,10 +23,11 @@ class OpenSquad {
 
 async function bootstrap() {
     const gameInstanceContainers = await configureContainers();
+    const mainLogger = container.resolve(LoggerService);
 
     try {
         if (gameInstanceContainers.length > 0) {
-            console.log(`${gameInstanceContainers.length} game instance(s) configured and starting...`);
+            mainLogger.info(`${gameInstanceContainers.length} game instance(s) configured and starting...`);
 
             for (const gameContainer of gameInstanceContainers) {
                 const logReader = gameContainer.resolve(LogReaderService);
