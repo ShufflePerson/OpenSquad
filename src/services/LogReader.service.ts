@@ -15,7 +15,6 @@ export class LogReaderService {
         private readonly logger: LoggerService,
         @inject(LOG_READER_CONFIG) private readonly config: LogReaderConfig
     ) {
-        logger.debug(`Using log source ${config.source} from ${config.path}`);
     }
 
     public onLogUpdate(callback: onNewLogCallback): void {
@@ -24,6 +23,7 @@ export class LogReaderService {
 
     public start(): void {
         const logFile = this.config.path;
+        this.logger.debug(`Using log source ${this.config.source} from ${logFile}`);
 
         try {
             const stats = fs.statSync(logFile);
