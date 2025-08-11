@@ -21,21 +21,21 @@ export class PluginManagerService {
     ) { }
 
     public async initializePlugins(gameType: EGameType): Promise<void> {
-        this.logger.info(`[PluginManager] Initializing plugins for ${gameType}...`);
+        this.logger.info(`Initializing plugins for ${gameType}...`);
 
         if (!fs.existsSync(this.pluginsPath)) {
-            this.logger.warn(`[PluginManager] Plugins directory not found at ${this.pluginsPath}. Skipping plugin loading.`);
+            this.logger.warn(`Plugins directory not found at ${this.pluginsPath}. Skipping plugin loading.`);
             return;
         }
 
         const gameConfig = this.configService.getCoreConfig()[gameType];
         if (!gameConfig || !gameConfig.plugins) {
-            this.logger.info(`[PluginManager] No plugins configured for ${gameType}.`);
+            this.logger.info(`No plugins configured for ${gameType}.`);
             return;
         }
 
         if (gameConfig.plugins.length === 0) {
-            this.logger.info(`[PluginManager] No plugins enabled for ${gameType}.`);
+            this.logger.info(`No plugins enabled for ${gameType}.`);
             return;
         }
 
@@ -47,27 +47,27 @@ export class PluginManagerService {
             if (plugin.onEnable) {
                 try {
                     await plugin.onEnable();
-                    this.logger.info(`[PluginManager] Enabled plugin: ${name}`);
+                    this.logger.info(`Enabled plugin: ${name}`);
                 } catch (err) {
-                    this.logger.error(`[PluginManager] Error enabling plugin ${name}:`, err);
+                    this.logger.error(`Error enabling plugin ${name}:`, err);
                 }
             }
         }
 
-        this.logger.info(`[PluginManager] All plugins initialized.`);
+        this.logger.info(`All plugins initialized.`);
     }
 
     private async loadPlugin(pluginName: string, gameType: EGameType): Promise<void> {
         const pluginPath = path.resolve(this.pluginsPath, pluginName);
         if (!fs.existsSync(pluginPath)) {
-            this.logger.error(`[PluginManager] Plugin directory not found for enabled plugin: ${pluginName}`);
+            this.logger.error(`Plugin directory not found for enabled plugin: ${pluginName}`);
             return;
         }
 
         try {
             const info = this.loadPluginInfo(pluginPath);
             if (info.name !== pluginName) {
-                this.logger.warn(`[PluginManager] Plugin folder name '${pluginName}' does not match plugin name '${info.name}' in its plugin.json.`);
+                this.logger.warn(`Plugin folder name '${pluginName}' does not match plugin name '${info.name}' in its plugin.json.`);
             }
 
             //todo: very ghetto fix, find a better solution
@@ -95,10 +95,10 @@ export class PluginManagerService {
             }
 
             this.plugins.set(info.name, pluginInstance);
-            this.logger.info(`[PluginManager] Loaded plugin: ${info.name} v${info.version} by ${info.author}`);
+            this.logger.info(`Loaded plugin: ${info.name} v${info.version} by ${info.author}`);
 
         } catch (err) {
-            this.logger.error(`[PluginManager] Failed to load plugin '${pluginName}':`, err);
+            this.logger.error(`Failed to load plugin '${pluginName}':`, err);
         }
     }
 
@@ -116,9 +116,9 @@ export class PluginManagerService {
             if (plugin.onDisable) {
                 try {
                     await plugin.onDisable();
-                    this.logger.info(`[PluginManager] Disabled plugin: ${name}`);
+                    this.logger.info(`Disabled plugin: ${name}`);
                 } catch (err) {
-                    this.logger.error(`[PluginManager] Error disabling plugin ${name}:`, err);
+                    this.logger.error(`Error disabling plugin ${name}:`, err);
                 }
             }
         }

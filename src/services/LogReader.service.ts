@@ -15,7 +15,7 @@ export class LogReaderService {
         private readonly logger: LoggerService,
         @inject(LOG_READER_CONFIG) private readonly config: LogReaderConfig
     ) {
-        logger.debug(`[LogReaderService] Using log source ${config.source} from ${config.path}`);
+        logger.debug(`Using log source ${config.source} from ${config.path}`);
     }
 
     public onLogUpdate(callback: onNewLogCallback): void {
@@ -29,7 +29,7 @@ export class LogReaderService {
             const stats = fs.statSync(logFile);
             this.lastFileSize = stats.size;
         } catch (error) {
-            this.logger.error(`[LogReaderService] Failed to access log file: ${logFile}. Please ensure it exists.`);
+            this.logger.error(`Failed to access log file: ${logFile}. Please ensure it exists.`);
             return;
         }
 
@@ -57,7 +57,7 @@ export class LogReaderService {
                     this.onNewLog(chunk.toString());
                 }
             });
-            stream.on('error', (err) => this.logger.error('[LogReaderService] Stream error:', err));
+            stream.on('error', (err) => this.logger.error('Stream error:', err));
         }
 
         this.lastFileSize = stats.size;

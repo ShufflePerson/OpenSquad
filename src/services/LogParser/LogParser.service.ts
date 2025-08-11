@@ -14,11 +14,11 @@ export class LogParserService {
         @inject(EVENT_PARSER) private readonly parsers: IEventParser[],
         private readonly eventManager: EventManagerService
     ) {
-        this.logger.info(`[LogParserService] Initialized with ${this.parsers.length} parsers.`);
+        this.logger.info(`Initialized with ${this.parsers.length} parsers.`);
     }
 
     public parseLogChunk(logChunk: string): void {
-        this.logger.debug(`[LogParserService] Received chunk of size: ${logChunk.length}`);
+        this.logger.debug(`Received chunk of size: ${logChunk.length}`);
         const newLines = logChunk.split('\n').filter(line => line.trim() !== '');
 
         for (const line of newLines) {
@@ -48,7 +48,7 @@ export class LogParserService {
             return null;
 
         } catch (err) {
-            this.logger.error(`[LogParserService] Error parsing line: ${line}`, err);
+            this.logger.error(`Error parsing line: ${line}`, err);
             return null;
         }
     }

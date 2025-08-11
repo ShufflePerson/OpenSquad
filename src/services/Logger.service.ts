@@ -26,6 +26,27 @@ export class LoggerService {
         this.logLevel = logLevelMap[level.toLowerCase()] ?? LogLevel.INFO;
     }
 
+    private getCallerInfo(): string {
+        const err = new Error();
+        const stack = err.stack?.split('\n');
+
+        if (stack && stack.length > 3) {
+            const callerLine = stack[4];
+            const match = callerLine.match(/at (?:new )?(?:(.*)\.)?(\w+) \(/);
+            if (match) {
+                const className = match[1];
+                const functionName = match[2];
+
+                if (className && functionName) {
+                    return `${className}.${functionName}`;
+                } else if (functionName) {
+                    return `${functionName}`;
+                }
+            }
+        }
+        return '';
+    }
+
 
     private log(level: LogLevel, message: string, ...data: any[]): void {
         if (level < this.logLevel) {
@@ -53,8 +74,10 @@ export class LoggerService {
                 break;
         }
 
+        const callerInfo = this.getCallerInfo();
         const coloredTimestamp = chalk.cyan(`[${timestamp}]`);
-        const logMessage = `${coloredLogLevel} ${coloredTimestamp} ${message}`;
+        const coloredCallerInfo = chalk.magenta(`[${callerInfo}]`);
+        const logMessage = `${coloredLogLevel} ${coloredTimestamp} ${coloredCallerInfo} ${message}`;
 
         switch (level) {
             case LogLevel.DEBUG:
