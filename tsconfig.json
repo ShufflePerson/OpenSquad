@@ -35,6 +35,9 @@
       ],
       "services/*": [
         "./src/services/*"
+      ],
+      "schemas/*": [
+        "./src/schemas/*"
       ]
     }
   },
