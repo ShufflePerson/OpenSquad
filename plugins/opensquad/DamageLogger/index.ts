@@ -15,12 +15,12 @@ export default class DamageLoggerPlugin implements IPlugin {
 
     public onEnable(): void {
         this.eventManager.on('TAKE_DAMAGE', this.onTakeDamage);
-        this.logger.info(`[${this.info.name}] Now listening for damage events.`);
+        this.logger.info(`Now listening for damage events.`);
     }
 
     public onDisable(): void {
         this.eventManager.off('TAKE_DAMAGE', this.onTakeDamage);
-        this.logger.info(`[${this.info.name}] Stopped listening for damage events.`);
+        this.logger.info(`Stopped listening for damage events.`);
     }
 
     private onTakeDamage = (log: IEventTakeDamage): void => {
