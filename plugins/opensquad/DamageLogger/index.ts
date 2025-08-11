@@ -19,7 +19,7 @@ export default class DamageLoggerPlugin extends BasePlugin<IDamageLoggerConfig> 
         this.dependencies.logger.info(`${this.getName()} has been shut down.`);
     }
 
-    private onTakeDamage(event: IEventTakeDamage) {
-        console.log(event.data);
+    private onTakeDamage = (event: IEventTakeDamage) => {
+        console.log(`${this.config.message}: Damage for ${event.data.damage}hp`);
     }
 }
