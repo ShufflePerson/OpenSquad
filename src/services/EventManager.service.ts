@@ -1,6 +1,7 @@
 import { singleton } from 'tsyringe';
 import { EventEmitter } from 'events';
 import { LoggerService } from './Logger.service';
+import { IEventMap } from '@/types/IEventMap.interface';
 
 @singleton()
 export class EventManagerService {
@@ -10,15 +11,15 @@ export class EventManagerService {
         this.emitter.setMaxListeners(500);
     }
 
-    public on(eventName: string, listener: (...args: any[]) => void): void {
+    public on<K extends keyof IEventMap>(eventName: K, listener: (payload: IEventMap[K]) => void): void {
         this.emitter.on(eventName, listener);
     }
 
-    public off(eventName: string, listener: (...args: any[]) => void): void {
+    public off<K extends keyof IEventMap>(eventName: K, listener: (payload: IEventMap[K]) => void): void {
         this.emitter.off(eventName, listener);
     }
 
-    public emit(eventName: string, ...args: any[]): void {
+    public emit<K extends keyof IEventMap>(eventName: K, ...args: [IEventMap[K]]): void {
         this.logger.debug(`[EventManager] Emitting event: ${eventName}`);
         this.emitter.emit(eventName, ...args);
     }
