@@ -1,0 +1,23 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
+    },
+    "include": [
+        "src/**/*.ts",
+        "plugins/**/*.ts",
+        "scripts/**/*.ts",
+        "tests/**/*.ts",
+        "vitest.config.ts"
+    ],
+    "paths": {
+        "services/*": [
+            "./src/services/*"
+        ],
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
