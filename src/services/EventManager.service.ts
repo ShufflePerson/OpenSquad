@@ -21,6 +21,10 @@ export class EventManagerService {
 
     public emit<K extends keyof IEventMap>(eventName: K, ...args: [IEventMap[K]]): void {
         this.logger.debug(`[EventManager] Emitting event: ${eventName}`);
-        this.emitter.emit(eventName, ...args);
+        try {
+            this.emitter.emit(eventName, ...args);
+        } catch (err) {
+            this.logger.error("An event listener has thrown an error:", err);
+        }
     }
 }
