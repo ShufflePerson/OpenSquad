@@ -8,17 +8,6 @@ export const registerServices = (container: DependencyContainer): void => {
     const configService = container.resolve(ConfigService);
     const logger = container.resolve(LoggerService);
 
-    container.register(LOG_READER_CONFIG, {
-        useValue: {
-            source: LogReaderSource.LOCAL,
-            path: configService.getCoreConfig().squad44.logs.path,
-        } as LogReaderConfig,
-    });
-
-    container.register(ENUM_GAME_TYPE, {
-        useValue: EGameType.SQUAD44,
-    });
-
     const coreConfig = configService.getCoreConfig();
     if (coreConfig.logging?.level) {
         logger.setLevel(coreConfig.logging.level);
