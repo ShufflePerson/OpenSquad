@@ -5,7 +5,7 @@ import { ConfigService } from './services/Config.service';
 import { LoggerService } from './services/Logger.service';
 import { LogReaderService } from './services/LogReader.service';
 import { LogParserService } from './services/LogParser/LogParser.service';
-import { configureContainer } from './container';
+import { configureContainers } from './container';
 
 @injectable()
 class OpenSquad {
@@ -22,18 +22,26 @@ class OpenSquad {
 }
 
 async function bootstrap() {
-    const container = await configureContainer();
+    const gameInstanceContainers = await configureContainers();
 
     try {
-        const logReader = container.resolve(LogReaderService);
-        const logParser = container.resolve(LogParserService);
-        logReader.onLogUpdate(logParser.parseLogChunk.bind(logParser));
+        if (gameInstanceContainers.length > 0) {
+            console.log(`${gameInstanceContainers.length} game instance(s) configured and starting...`);
 
-        const openSquad = container.resolve(OpenSquad);
-        logReader.start();
+            for (const gameContainer of gameInstanceContainers) {
+                const logReader = gameContainer.resolve(LogReaderService);
+                const logParser = gameContainer.resolve(LogParserService);
+                logReader.onLogUpdate(logParser.parseLogChunk.bind(logParser));
 
-        process.on('SIGINT', () => openSquad.shutdown());
-        process.on('SIGTERM', () => openSquad.shutdown());
+                const openSquad = gameContainer.resolve(OpenSquad);
+                logReader.start();
+
+                process.on('SIGINT', () => openSquad.shutdown());
+                process.on('SIGTERM', () => openSquad.shutdown());
+            }
+        } else {
+            console.log('OpenSquad finished: No instances to run.');
+        }
     } catch (error) {
         console.error('A fatal error occurred during OpenSquad startup.', error as Error);
         process.exit(1);
