@@ -27,7 +27,7 @@ export const bootstrapGameInstance = async (
     });
 
     registerParsers(gameContainer);
-    await registerPlugins(gameContainer);
+    await registerPlugins(gameContainer, gameType);
 
     logger.info(`[${gameType}] Instance bootstrapped successfully with log path "${config.logs.path}".`);
 };
