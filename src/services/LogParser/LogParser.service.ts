@@ -26,7 +26,6 @@ export class LogParserService {
 
             if (parsedLog) {
                 this.eventManager.emit(parsedLog.type, parsedLog);
-                this.eventManager.emit('log-parsed', parsedLog);
             }
         }
     }
@@ -44,7 +43,6 @@ export class LogParserService {
                 return suitableParser.parse(line, timestamp, this.gameType);
             }
 
-            this.eventManager.emit('log-unparsed', line);
             return null;
 
         } catch (err) {
