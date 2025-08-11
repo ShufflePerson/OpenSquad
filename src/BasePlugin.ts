@@ -5,7 +5,7 @@ import { IPluginInfo } from "./types/IPluginInfo.interface";
 export abstract class BasePlugin<T> {
     protected dependencies!: IPluginDependencies;
     protected config!: T;
-    protected readonly pluginInfo: IPluginInfo;
+    readonly pluginInfo: IPluginInfo;
 
     constructor(pluginInfo: IPluginInfo) {
         this.pluginInfo = pluginInfo;
