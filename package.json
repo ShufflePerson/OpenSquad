@@ -10,7 +10,9 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "start-log-simulation": "node scripts/simulateLogChanges.js"
+    "start-log-simulation": "node scripts/simulateLogChanges.js",
+    "test": "vitest --config ./vitest.config.ts",
+    "coverage": "vitest run --coverage --config ./vitest.config.ts"
   },
   "repository": {
     "type": "git",
@@ -58,6 +60,7 @@
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4"
   }
 }
