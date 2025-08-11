@@ -3,7 +3,9 @@ import { BasePlugin } from "@/BasePlugin";
 import { IPluginDependencies } from "@/types/IPluginDependencies.interface";
 import { EEventType } from "@/types/enums/EEventType";
 
-interface IDamageLoggerConfig { }
+interface IDamageLoggerConfig {
+    message: string;
+}
 
 export default class DamageLoggerPlugin extends BasePlugin<IDamageLoggerConfig> {
     public async init(dependencies: IPluginDependencies, config: IDamageLoggerConfig): Promise<void> {
