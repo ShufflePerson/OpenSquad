@@ -42,7 +42,7 @@ export class LogReaderService {
             }
         });
 
-        this.logger.debug(`[LogParserService] Started watching ${logFile} at ${this.lastFileSize} bytes.`);
+        this.logger.debug(`Started watching ${logFile} at ${this.lastFileSize} bytes.`);
 
         watcher.on('change', (path, stats) => this._onFileChange(path, stats));
     }
