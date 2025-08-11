@@ -11,15 +11,6 @@
                 "panel": "dedicated",
                 "reveal": "always",
                 "clear": true
-            },
-            "options": {
-                "shell": {
-                    "executable": "cmd.exe",
-                    "args": [
-                        "/d",
-                        "/c"
-                    ]
-                }
             }
         },
         {
@@ -36,15 +27,6 @@
                 "panel": "dedicated",
                 "reveal": "always",
                 "clear": true
-            },
-            "options": {
-                "shell": {
-                    "executable": "cmd.exe",
-                    "args": [
-                        "/d",
-                        "/c"
-                    ]
-                }
             }
         },
         {
