@@ -11,7 +11,6 @@ import { EGameType } from '@/types/enums/EGameType';
 export const configureContainers = async (): Promise<DependencyContainer[]> => {
     registerParsers(container);
     registerServices(container);
-    await registerPlugins(container);
 
     const configService = container.resolve(ConfigService);
     const logger = container.resolve(LoggerService);

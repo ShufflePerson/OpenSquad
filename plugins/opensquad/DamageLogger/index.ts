@@ -1,29 +1,23 @@
-import { IPlugin } from "types/IPlugin.interface";
-import { LoggerService } from "services/Logger.service";
-import { EventManagerService } from "services/EventManager.service";
 import { IEventTakeDamage } from "types/services/LogParser/IParsedLog";
+import { BasePlugin } from "@/BasePlugin";
+import { IPluginDependencies } from "@/types/IPluginDependencies.interface";
+import { EEventType } from "@/types/enums/EEventType";
 
+interface IDamageLoggerConfig { }
 
-export default class DamageLoggerPlugin implements IPlugin {
-    public readonly info!: IPlugin['info'];
-    public config: any;
-
-    constructor(
-        private readonly logger: LoggerService,
-        private readonly eventManager: EventManagerService
-    ) { }
-
-    public onEnable(): void {
-        this.eventManager.on('TAKE_DAMAGE', this.onTakeDamage);
-        this.logger.info(`Now listening for damage events.`);
+export default class DamageLoggerPlugin extends BasePlugin<IDamageLoggerConfig> {
+    public async init(dependencies: IPluginDependencies, config: IDamageLoggerConfig): Promise<void> {
+        await super.init(dependencies, config);
+        this.dependencies.eventManager.on(EEventType.TAKE_DAMAGE, this.onTakeDamage);
+        this.dependencies.logger.info(`${this.getName()} has been initialized successfully.`);
     }
 
-    public onDisable(): void {
-        this.eventManager.off('TAKE_DAMAGE', this.onTakeDamage);
-        this.logger.info(`Stopped listening for damage events.`);
+    public async shutdown(): Promise<void> {
+        this.dependencies.logger.info(`Shutting down ${this.getName()}...`);
+        this.dependencies.logger.info(`${this.getName()} has been shut down.`);
     }
 
-    private onTakeDamage = (log: IEventTakeDamage): void => {
-        console.log(log);
+    private onTakeDamage(event: IEventTakeDamage) {
+        console.log(event.data);
     }
 }

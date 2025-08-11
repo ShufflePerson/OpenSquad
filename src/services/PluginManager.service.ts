@@ -5,13 +5,17 @@ import { LoggerService } from './Logger.service';
 import { ConfigService } from './Config.service';
 import { EventManagerService } from './EventManager.service';
 import { EGameType } from 'types/enums/EGameType';
-import { IPlugin, IPluginConstructor } from 'types/IPlugin.interface';
 import { IPluginInfo } from 'types/IPluginInfo.interface';
 import { pathToFileURL } from 'url';
+import { BasePlugin } from '@/BasePlugin';
+import { IPluginDependencies } from '@/types/IPluginDependencies.interface';
+
+type PluginConstructor = new (pluginInfo: IPluginInfo) => BasePlugin<any>;
+
 
 @singleton()
 export class PluginManagerService {
-    private readonly plugins: Map<string, IPlugin> = new Map();
+    private readonly plugins: Map<string, BasePlugin<any>> = new Map();
     private readonly pluginsPath = path.resolve(process.cwd(), 'plugins/opensquad');
 
     constructor(
@@ -29,12 +33,7 @@ export class PluginManagerService {
         }
 
         const gameConfig = this.configService.getCoreConfig()[gameType];
-        if (!gameConfig || !gameConfig.plugins) {
-            this.logger.info(`No plugins configured for ${gameType}.`);
-            return;
-        }
-
-        if (gameConfig.plugins.length === 0) {
+        if (!gameConfig || !gameConfig.plugins || gameConfig.plugins.length === 0) {
             this.logger.info(`No plugins enabled for ${gameType}.`);
             return;
         }
@@ -43,18 +42,7 @@ export class PluginManagerService {
             await this.loadPlugin(pluginName, gameType);
         }
 
-        for (const [name, plugin] of this.plugins.entries()) {
-            if (plugin.onEnable) {
-                try {
-                    await plugin.onEnable();
-                    this.logger.info(`Enabled plugin: ${name}`);
-                } catch (err) {
-                    this.logger.error(`Error enabling plugin ${name}:`, err);
-                }
-            }
-        }
-
-        this.logger.info(`All plugins initialized.`);
+        this.logger.info(`All plugins for ${gameType} have been loaded and initialized.`);
     }
 
     private async loadPlugin(pluginName: string, gameType: EGameType): Promise<void> {
@@ -70,7 +58,6 @@ export class PluginManagerService {
                 this.logger.warn(`Plugin folder name '${pluginName}' does not match plugin name '${info.name}' in its plugin.json.`);
             }
 
-            //todo: very ghetto fix, find a better solution
             const mainFilePath = path.resolve(process.cwd(), "dist", "plugins/opensquad", pluginName, info.main);
             if (!fs.existsSync(mainFilePath)) {
                 throw new Error(`Main file '${info.main}' not found for plugin '${info.name}'.`);
@@ -83,19 +70,21 @@ export class PluginManagerService {
                 throw new Error(`Plugin '${info.name}' must have a default export.`);
             }
 
-            //todo: find out why there is a default export for another default export
-            const PluginClass: IPluginConstructor = pluginModule.default.default;
-            const pluginInstance = new PluginClass(this.logger, this.eventManager);
+            const PluginClass: PluginConstructor = pluginModule.default.default || pluginModule.default;
 
-            (pluginInstance as any).info = info;
-            pluginInstance.config = this.configService.getPluginConfig(info.name, gameType);
+            const pluginInstance = new PluginClass(info);
 
-            if (pluginInstance.onLoad) {
-                await pluginInstance.onLoad();
-            }
+            const dependencies: IPluginDependencies = {
+                logger: this.logger,
+                eventManager: this.eventManager,
+                pluginInfo: info
+            };
+            const config = this.configService.getPluginConfig(info.name, gameType);
+
+            await pluginInstance.init(dependencies, config);
 
             this.plugins.set(info.name, pluginInstance);
-            this.logger.info(`Loaded plugin: ${info.name} v${info.version} by ${info.author}`);
+            this.logger.info(`Loaded and initialized plugin: ${info.name} v${info.version} by ${info.author}`);
 
         } catch (err) {
             this.logger.error(`Failed to load plugin '${pluginName}':`, err);
@@ -112,16 +101,16 @@ export class PluginManagerService {
     }
 
     public async shutdownPlugins(): Promise<void> {
+        this.logger.info('Shutting down all plugins...');
         for (const [name, plugin] of this.plugins.entries()) {
-            if (plugin.onDisable) {
-                try {
-                    await plugin.onDisable();
-                    this.logger.info(`Disabled plugin: ${name}`);
-                } catch (err) {
-                    this.logger.error(`Error disabling plugin ${name}:`, err);
-                }
+            try {
+                await plugin.shutdown();
+                this.logger.info(`Shutdown plugin: ${name}`);
+            } catch (err) {
+                this.logger.error(`Error shutting down plugin ${name}:`, err);
             }
         }
         this.plugins.clear();
+        this.logger.info('All plugins have been shut down.');
     }
 }
