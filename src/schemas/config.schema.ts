@@ -2,7 +2,9 @@ import { EGameType } from '@/types/enums/EGameType';
 import { z } from 'zod';
 
 const envSchema = z.object({
-    DISCORD_BOT_TOKEN: z.string().min(1, 'DISCORD_BOT_TOKEN is required.'),
+    DISCORD_BOT_TOKEN: z.string(),
+    SQUAD_RCON_PASSWORD: z.string(),
+    SQUAD44_RCON_PASSWORD: z.string()
 });
 
 const gameConfigSchema = z.object({

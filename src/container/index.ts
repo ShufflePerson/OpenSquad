@@ -25,7 +25,8 @@ export const configureContainers = async (): Promise<DependencyContainer[]> => {
         await bootstrapGameInstance(
             squadContainer,
             EGameType.SQUAD,
-            coreConfig.squad
+            coreConfig.squad,
+            configService.getEnvConfig().SQUAD_RCON_PASSWORD
         );
         configuredInstances.push(squadContainer);
     } else {
@@ -38,13 +39,13 @@ export const configureContainers = async (): Promise<DependencyContainer[]> => {
         await bootstrapGameInstance(
             squad44Container,
             EGameType.SQUAD44,
-            coreConfig.squad44
+            coreConfig.squad44,
+            configService.getEnvConfig().SQUAD44_RCON_PASSWORD
         );
         configuredInstances.push(squad44Container);
     } else {
         logger.info('Squad44 is disabled in the configuration.');
     }
-
 
     if (configuredInstances.length === 0) {
         logger.warn('No game instances were enabled. The application might not do anything.');

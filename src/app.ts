@@ -6,6 +6,7 @@ import { LoggerService } from './services/Logger.service';
 import { LogReaderService } from './services/LogReader.service';
 import { LogParserService } from './services/LogParser/LogParser.service';
 import { configureContainers } from './container';
+import { RCONService } from "./services/RCON/RCONService";
 
 @injectable()
 class OpenSquad {
@@ -32,10 +33,12 @@ async function bootstrap() {
             for (const gameContainer of gameInstanceContainers) {
                 const logReader = gameContainer.resolve(LogReaderService);
                 const logParser = gameContainer.resolve(LogParserService);
+                const rcon = gameContainer.resolve(RCONService);
                 logReader.onLogUpdate(logParser.parseLogChunk.bind(logParser));
 
                 const openSquad = gameContainer.resolve(OpenSquad);
                 logReader.start();
+                await rcon.connect();
 
                 process.on('SIGINT', () => openSquad.shutdown());
                 process.on('SIGTERM', () => openSquad.shutdown());

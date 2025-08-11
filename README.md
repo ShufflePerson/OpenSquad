@@ -33,7 +33,6 @@ Whenever possible, every parser should support both games ( Squad & Squad44 ), i
 ## Todo
 
 - More parsers
-- RCON support
 - Database support
 - Discord support
 - Tests
