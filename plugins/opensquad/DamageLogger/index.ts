@@ -10,12 +10,13 @@ interface IDamageLoggerConfig {
 export default class DamageLoggerPlugin extends BasePlugin<IDamageLoggerConfig> {
     public async init(dependencies: IPluginDependencies, config: IDamageLoggerConfig): Promise<void> {
         await super.init(dependencies, config);
-        this.dependencies.eventManager.on(EEventType.TAKE_DAMAGE, this.onTakeDamage);
+        this.dependencies.eventManager.on(this, EEventType.TAKE_DAMAGE, this.onTakeDamage);
         this.dependencies.logger.info(`${this.getName()} has been initialized successfully.`);
     }
 
     public async shutdown(): Promise<void> {
         this.dependencies.logger.info(`Shutting down ${this.getName()}...`);
+        this.dependencies.eventManager.unsubscribeAll(this);
         this.dependencies.logger.info(`${this.getName()} has been shut down.`);
     }
 
