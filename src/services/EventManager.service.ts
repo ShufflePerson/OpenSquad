@@ -54,7 +54,7 @@ export class EventManagerService {
     }
 
     public emit<K extends keyof IEventMap>(eventName: K, ...args: [IEventMap[K]]): void {
-        this.logger.debug(`[EventManager] Emitting event: ${eventName}`);
+        this.logger.debug(`Emitting event: ${eventName}`);
         try {
             this.emitter.emit(eventName, ...args);
         } catch (err) {
@@ -66,11 +66,11 @@ export class EventManagerService {
         const subscriberListeners = this.subscriptions.get(subscriber);
 
         if (!subscriberListeners) {
-            this.logger.debug(`[EventManager] No subscriptions found for the given instance.`);
+            this.logger.debug(`No subscriptions found for the given instance.`);
             return;
         }
 
-        this.logger.debug(`[EventManager] Unsubscribing all ${subscriberListeners.length} listeners for an instance.`);
+        this.logger.debug(`Unsubscribing all ${subscriberListeners.length} listeners for an instance.`);
 
         for (const { eventName, listener } of subscriberListeners) {
             this.emitter.off(eventName, listener);
